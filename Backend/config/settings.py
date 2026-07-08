@@ -39,8 +39,34 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'notas',
+    'rest_framework',
+    
 ]
+REST_FRAMEWORK = {
+    # Permite acesso total para desenvolvimento (mude em produção)
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    # Habilita a paginação automática dos resultados da API
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        # Exige autenticação para todos os endpoints por padrão
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+from datetime import timedelta
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),     # Tempo que o token de acesso vale
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),        # Tempo para renovar o acesso
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'AUTH_HEADER_TYPES': ('Bearer',),                   # Prefixo usado no Header (Ex: Bearer <token>)
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
